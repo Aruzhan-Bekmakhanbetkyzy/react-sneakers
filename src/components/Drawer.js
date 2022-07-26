@@ -1,10 +1,11 @@
 function Drawer({ onClose, onRemove, items = [] }) {
+    console.log(items);
     return (
     <div className="overlay">  
         <div className="drawer">
             <h2 className="d-flex justify-between mb-30">Shopping Cart <img onClick={onClose} className="cu-p" src="/img/btn-remove.svg" alt="Remove"></img></h2>
 
-        { items.length > 0 ? ( 
+        { items.length > 0 ? (  
         <div>
             <div className="items">
                 { items.map((obj) => (

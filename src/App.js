@@ -7,6 +7,7 @@ import Card from './components/Card';
 function App() {
   const [items, setItems] = React.useState([]);
   const [cartItems, setCartItems] = React.useState([]);
+  const [favorites, setFavorites] = React.useState([]);
   const [searchValue, setSearchValue] = React.useState('');
   const [cartOpened, setCartOpened] = React.useState(false);
 
@@ -21,21 +22,25 @@ function App() {
 
   const onAddToCart = (obj) => {
     axios.post('https://62da48b69eedb699636a3b8e.mockapi.io/cart', obj);
-    let item = cartItems.filter((o,i) => o.title === obj.title);
+    // let item = cartItems.filter((o,i) => o.title === obj.title);
       //  console.log("aasdasd", item);
-    if (item.length > 0) {
+    // if (item.length > 0) {
       // delete 
-      console.log("delete should happen")
-    } else {
+      // console.log("delete should happen")
+    // } else {
       //add
       setCartItems((prev) => [...prev, obj]);
-    }
+    // }
   };
 
   const onRemoveItem = (id) => {
-    console.log(id);
-    // axios.delete(`https://62da48b69eedb699636a3b8e.mockapi.io/cart${id}`);
+    axios.delete(`https://62da48b69eedb699636a3b8e.mockapi.io/cart/${id}`);
     setCartItems((prev) => prev.filter((item) => item.id !== id));  
+  };
+
+  const onAddToFavorite = (obj) => {
+    axios.post(`https://62da48b69eedb699636a3b8e.mockapi.io/favorites`, obj);
+    setFavorites((prev) => [...prev, obj]);
   }
 
   const onChangeSearchInput = (event) => {
@@ -59,15 +64,14 @@ function App() {
         <div className="d-flex flex-wrap">
 
           {items
-          // .filter((item) => item.title.toLowerCase().includes(searchValue.toLowerCase())) 
-          //поиск по всем кроссовкам не работаает
+          .filter((item) => item.name.toLowerCase().includes(searchValue.toLowerCase())) 
           .map((item, index) => (
           <Card 
           key={index}
           title={item.name}
           price={item.price}
           imageUrl={item.imageUrl} 
-          onFavorite={() => console.log('Добавили в закладки')}
+          onFavorite={(obj) => onAddToFavorite(obj)}
           onPlus={(obj) => onAddToCart(obj)}
           /> 
           ))}
